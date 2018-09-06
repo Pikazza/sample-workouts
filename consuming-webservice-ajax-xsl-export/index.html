@@ -5,54 +5,75 @@
 <title>Api Docs</title>
 <style>
 table, th, td {
-    border: 1px solid black;
+	border: 1px solid black;
 }
+
 div.dataTables_wrapper {
-        margin-bottom: 3em;
-    }
+	margin-bottom: 3em;
+}
+
+.container {
+	width: 300px;
+	clear: both;
+}
+
+.container label {
+	width: 100%;
+	clear: both;
+}
+
+.container input {
+	width: 100%;
+	clear: both;
+}
+
+/*  #sessions-table-hide{
+    display: none;
+} */
+
+ #sessions-table{
+    display: none;
+}
+
 </style>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
 
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
- <script
-	src="https://code.jquery.com/jquery-3.3.1.js"></script> 
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script
-	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	  <script
-	src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js">  </script>
+	src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-	<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-	
-	
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script> 
-	<script
-	src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> 
-<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 
-<!-- <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
-	
-<script src="welcome.js"></script>
-<!-- <script src="get-members.js"></script> -->
+<script src="api-calls.js"></script>
 <script type="text/javascript">
  $(function(){
-    /* $('#download-members').click(function(){
-        var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#my_id').html()) 
-        location.href=url
-    	return false;
-    }) */
+	 
     $('#download-members').click(function(){
-	 $("#members_table").table2excel({
+    console.log("coming to calling athlete service")
+	 $("#members-table").table2excel({
 		    name: "sheet1",
-		    filename: "members.xls"
+		    filename: "athletes.xls"
      });
     }) 
-}) 
+    
+    $('#download-sessions').click(function(){
+    	
+   	  $("#sessions-table").table2excel({
+   		    name: "sheet1",
+   		    filename: "sessions.xls"
+        });
+   	 
+   	$("#sessions-table-hide").table2excel({
+		    name: "sheet2",
+		    filename: "sessions-details.xls"
+    });
+   	
+       }) 
+    
+})
 </script>
 
 
@@ -60,29 +81,57 @@ div.dataTables_wrapper {
 <body>
 	<p>This page is to access Web Services</p>
 
-	<p>1. Greetings API</p>
-	<button id="welcome" type="button">Call API</button>
-	<div>
-		<p class="welcome-content">The Response is</p>
-	</div>
-	<p></p>
-	<p>1. Logni API</p>
-	<button id="login" type="button">Call API</button>
-	<div>
-		<p class="login-content">The Response is </p>
-	</div>
-	<p></p>
-	
-	<p>2. Members API</p>
+	<p>1. Athletes API</p>
 	<button id="get-members" type="button">Call API</button>
 	<button id="download-members" type="button">Export to Excel</button>
-	<p class="get-members-table">The table is</p>
-	<div id="my_id">
-		<table id="members_table" style="width: auto">
-			<tbody>
-			</tbody>
-		</table>
+	<br>
+	<p class="get-members-table">The table is <span class="get-members-table-span"> </span></p>
+	<table id="members-table" style="width: auto">
+		<tbody>
+		</tbody>
+	</table>
+
+	<br>
+	<br>
+
+	<p>2. CAS Login</p>
+	<div class="container">
+		<label for="cas-name">Username:</label> <input type="text"
+			id="cas-name" value="geoff.noonan@impacttechlabs.com" /><br> <label for="cas-password">Password:
+		</label> <input type="text" id="cas-password" value="3Lincolns!"/><br>
 	</div>
+	<button id="cas-login" type="button">Login</button>
+	<br>
+	<p class="cas-login-table">Login is  <span class="cas-login-table-span"> </span>  </p>
+
+	<br>
+	<br>
+
+	<p>3. Athletes Session</p>
+	<div class="container">
+
+		<label for="ath-id">Athlete Id:</label> <input type="text" id="ath-id" /><br>
+
+		<label for="ses-fromdate">fromDate: </label> <input type="text"
+			id="ses-fromdate" /><br> 
+			
+		<label for="ses-todate">toDate:
+			</label> <input type="text" id="ses-todate" /><br>
+
+	</div>
+
+	<button id="get-sessions" type="button">Call API</button>
+	<button id="download-sessions" type="button">Export to Excel</button>
+	<br>
+	<p class="get-sessions-table">The table is <span class="get-sessions-table-span"> </span> </p>
+	<table id="sessions-table" style="width: auto">
+		<tbody>
+		</tbody>
+	</table>
+	<table id="sessions-table-hide" style="width: auto">
+		<tbody>
+		</tbody>
+	</table>
 
 </body>
 </html>
